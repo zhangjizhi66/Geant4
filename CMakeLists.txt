@@ -7,7 +7,7 @@ cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
 #set(CMAKE_CXX_COMPILER "/usr/local/bin/g++") #调用自己安装的g++
 set(PROJ_NAME geant4)
 project(${PROJ_NAME} C CXX Fortran)
-set(CMAKE_CXX_FLAGS "-std=c++11 -Wno-deprecated") #支持最新c++11
+set(CMAKE_CXX_FLAGS "-std=c++11 -Wno-deprecated -Wno-unused-parameter") #支持最新c++11
 #c++0x是新的C++意思。而-Wno-deprecated是表示 no-deprecated这类警告忽略。
 
 SET(CMAKE_BUILD_TYPE Debug) #编译调试版本

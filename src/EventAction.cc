@@ -1,15 +1,5 @@
-// wuEventActionAll.cc --- 
-// 
-// Description: 
-// Author: Hongyi Wu(吴鸿毅)
-// Email: wuhongyi@qq.com 
-// Created: 一 5月  8 21:04:59 2017 (+0800)
-// Last-Updated: 五 6月  9 16:33:47 2017 (+0800)
-//           By: Hongyi Wu(吴鸿毅)
-//     Update #: 7
-// URL: http://wuhongyi.cn 
 
-#include "wuEventActionAll.hh"
+#include "EventAction.hh"
 
 #include "G4Event.hh"
 #include "G4EventManager.hh"
@@ -17,21 +7,14 @@
 #include "globals.hh"
 
 #include "G4DigiManager.hh"
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-wuEventActionAll::wuEventActionAll()
-{
+EventAction::EventAction()
+{}
 
-}
+EventAction::~EventAction()
+{}
 
-wuEventActionAll::~wuEventActionAll()
-{
-
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void wuEventActionAll::BeginOfEventAction(const G4Event* /*anEvent*/)
+void EventAction::BeginOfEventAction(const G4Event* /*anEvent*/)
 {
   // anEvent->GetEventID();//  Returns the event ID
   
@@ -64,7 +47,7 @@ void wuEventActionAll::BeginOfEventAction(const G4Event* /*anEvent*/)
   // primaryparticle->GetPx();//G4ThreeVector
   // primaryparticle->GetPy();//G4ThreeVector
   // primaryparticle->GetPz();//G4ThreeVector
-  // primaryparticle->GetTrackID();//G4int     "trackID" will be set if this particle is sent to G4EventManager and converted to G4Track. Otherwise = -1.
+  // primaryparticle->GetTrackID();//G4int "trackID" will be set if this particle is sent to G4EventManager and converted to G4Track. Otherwise = -1.
   // primaryparticle->GetPolarization();//G4ThreeVector
   // primaryparticle->GetPolX();//G4double
   // primaryparticle->GetPolY();//G4double
@@ -73,28 +56,12 @@ void wuEventActionAll::BeginOfEventAction(const G4Event* /*anEvent*/)
   // primaryparticle->GetProperTime();//G4double   
   // primaryparticle->GetUserInformation();//G4VUserPrimaryParticleInformation*
   // primaryparticle->SetUserInformation(/*G4VUserPrimaryParticleInformation* anInfo*/);
-
   
   // anEvent->SetUserInformation(/*G4VUserEventInformation* anInfo*/);
   // anEvent->GetUserInformation();//return G4VUserEventInformation*
-
-  //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-  
-
-
-
-
-
-
-
-
-
-
-  
-  
 }
 
-void wuEventActionAll::EndOfEventAction(const G4Event* /*anEvent*/)
+void EventAction::EndOfEventAction(const G4Event* /*anEvent*/)
 {
   // // 读取该事件SD中记录的数据
   // G4HCofThisEvent *HCE = anEvent->GetHCofThisEvent();//SD  (hits collections of this event)
@@ -110,14 +77,4 @@ void wuEventActionAll::EndOfEventAction(const G4Event* /*anEvent*/)
   //   }
 
   // G4DCofThisEvent* *DCE = anEvent->GetDCofThisEvent();// (digi collections of this event)
-
-  //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-  
-
-
-
-  
 }
-
-// 
-// wuEventActionAll.cc ends here

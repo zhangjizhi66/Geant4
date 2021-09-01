@@ -1,16 +1,6 @@
-// wuDetectorConstruction.hh --- 
-// 
-// Description: 
-// Author: Hongyi Wu(吴鸿毅)
-// Email: wuhongyi@qq.com 
-// Created: 四 5月 22 16:45:21 2014 (+0800)
-// Last-Updated: 一 5月  7 21:46:04 2018 (+0800)
-//           By: Hongyi Wu(吴鸿毅)
-//     Update #: 28
-// URL: http://wuhongyi.cn 
 
-#ifndef _WUDETECTORCONSTRUCTION_H_
-#define _WUDETECTORCONSTRUCTION_H_
+#ifndef _DETECTORCONSTRUCTION_H_
+#define _DETECTORCONSTRUCTION_H_
 
 
 #include "G4TransportationManager.hh"
@@ -21,7 +11,6 @@
 
 // GDML parser include，可视化界面几何体颜色设置用
 #include "G4GDMLParser.hh"
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 // class description:
 //
@@ -35,11 +24,11 @@ class G4VPhysicalVolume;
 class G4LogicalVolume;
 class G4VisAttributes;
 
-class wuDetectorConstruction: public G4VUserDetectorConstruction
+class DetectorConstruction: public G4VUserDetectorConstruction
 {
 public:
-  wuDetectorConstruction();
-  virtual ~wuDetectorConstruction();
+  DetectorConstruction();
+  virtual ~DetectorConstruction();
 
 public:
   virtual G4VPhysicalVolume* Construct();
@@ -52,7 +41,7 @@ private:
   void DefineMaterials();
   G4VPhysicalVolume* DefineVolumes();
 
-  void BuildSensitiveDetector(G4LogicalVolume* lv);//
+  void BuildSensitiveDetector(G4LogicalVolume* lv);
 
 private: 
   G4bool checkOverlaps; // Option to switch on/off checking of volumes overlaps
@@ -193,6 +182,4 @@ private:
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif /* _WUDETECTORCONSTRUCTION_H_ */
-// 
-// wuDetectorConstruction.hh ends here
+#endif /* _DETECTORCONSTRUCTION_H_ */

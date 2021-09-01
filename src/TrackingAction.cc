@@ -1,15 +1,5 @@
-// wuTrackingActionAll.cc --- 
-// 
-// Description: 
-// Author: Hongyi Wu(吴鸿毅)
-// Email: wuhongyi@qq.com 
-// Created: 一 5月  8 21:50:46 2017 (+0800)
-// Last-Updated: 六 5月  5 16:05:30 2018 (+0800)
-//           By: Hongyi Wu(吴鸿毅)
-//     Update #: 8
-// URL: http://wuhongyi.cn 
 
-#include "wuTrackingActionAll.hh"
+#include "TrackingAction.hh"
 
 #include "globals.hh"
 #include "G4RunManager.hh"
@@ -17,22 +7,14 @@
 #include "G4TrackVector.hh"
 #include "G4ParticleTypes.hh"
 #include "G4TrackingManager.hh"
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-wuTrackingActionAll::wuTrackingActionAll()
-  : G4UserTrackingAction()
-{
+TrackingAction::TrackingAction() : G4UserTrackingAction()
+{}
 
-}
+TrackingAction::~TrackingAction()
+{}
 
-wuTrackingActionAll::~wuTrackingActionAll()
-{
-
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void wuTrackingActionAll::PreUserTrackingAction(const G4Track* aTrack)
+void TrackingAction::PreUserTrackingAction(const G4Track* aTrack)
 {
   // aTrack->GetTrackID();//G4int
   // aTrack->GetParentID();//G4int
@@ -45,8 +27,6 @@ void wuTrackingActionAll::PreUserTrackingAction(const G4Track* aTrack)
   // else G4String CreatorProcess = "##";
   // pcr->GetProcessType();//G4ProcessType    Returns the process type.
   // pcr->GetProcessSubType();//G4int    Returns the process sub type.
-  
-  
   
   // aTrack->GetTrackLength();//G4double
   // // Before the end of the AlongStepDoIt loop,StepLength keeps the initial value which is determined by the shortest geometrical Step proposed by a physics process. After finishing the AlongStepDoIt, it will be set equal to 'StepLength' in G4Step.
@@ -85,28 +65,21 @@ void wuTrackingActionAll::PreUserTrackingAction(const G4Track* aTrack)
   // aTrack->GetProperTime();//G4double    Proper time of the current track
   // aTrack->GetDynamicParticle();//G4DynamicParticle*   dynamic particle 
   // aTrack->GetParticleDefinition();//G4ParticleDefinition*    particle definition 
-
   
   // // vertex (,where this track was created) information  
   // aTrack->GetVertexPosition();//G4ThreeVector&
   // aTrack->GetVertexMomentumDirection();//G4ThreeVector&
   // aTrack->GetVertexKineticEnergy();//G4double
   // aTrack->GetLogicalVolumeAtVertex();//G4LogicalVolume*
-
   
   // aTrack->GetUserInformation();// G4VUserTrackInformation*
   // aTrack->SetUserInformation(/*G4VUserTrackInformation* aValue*/);
 
   // 以上是数据接口定义
-  //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-
-  
 }
 
-void wuTrackingActionAll::PostUserTrackingAction(const G4Track* aTrack)
+void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
 {
-
   // G4TrackVector* secondaries = fpTrackingManager->GimmeSecondaries();//获得次级粒子
   // if(secondaries)//如果存在次级粒子
   //   {
@@ -119,13 +92,4 @@ void wuTrackingActionAll::PostUserTrackingAction(const G4Track* aTrack)
   // 	    }
   // 	}
   //   }
-
-  //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-  
-
- 
 }
-
-
-// 
-// wuTrackingActionAll.cc ends here

@@ -1,26 +1,15 @@
-// wuStackingActionAll.hh --- 
-// 
-// Description: 
-// Author: Hongyi Wu(吴鸿毅)
-// Email: wuhongyi@qq.com 
-// Created: 一 5月  8 22:50:33 2017 (+0800)
-// Last-Updated: 一 5月  8 23:05:56 2017 (+0800)
-//           By: Hongyi Wu(吴鸿毅)
-//     Update #: 2
-// URL: http://wuhongyi.cn 
 
-#ifndef _WUSTACKINGACTIONALL_H_
-#define _WUSTACKINGACTIONALL_H_
+#ifndef _STACKINGACTION_H_
+#define _STACKINGACTION_H_
 
 #include "G4UserStackingAction.hh"
 #include "G4ClassificationOfNewTrack.hh"
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class wuStackingActionAll : public G4UserStackingAction
+class StackingAction : public G4UserStackingAction
 {
 public:
-  wuStackingActionAll();
-  virtual ~wuStackingActionAll();
+  StackingAction();
+  virtual ~StackingAction();
 
 public:
   // Reply G4ClassificationOfNewTrack determined by the newly coming G4Track.
@@ -60,7 +49,4 @@ public:
 //   fWaiting_6=16, fWaiting_7=17, fWaiting_8=18, fWaiting_9=19, fWaiting_10=20
 // };
 
-#endif /* _WUSTACKINGACTIONALL_H_ */
-// 
-// wuStackingActionAll.hh ends here
-
+#endif /* _STACKINGACTION_H_ */

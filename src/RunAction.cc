@@ -1,15 +1,5 @@
-// wuRunActionAll.cc --- 
-// 
-// Description: 
-// Author: Hongyi Wu(吴鸿毅)
-// Email: wuhongyi@qq.com 
-// Created: 一 5月  8 20:40:01 2017 (+0800)
-// Last-Updated: 日 5月  6 21:39:42 2018 (+0800)
-//           By: Hongyi Wu(吴鸿毅)
-//     Update #: 6
-// URL: http://wuhongyi.cn 
 
-#include "wuRunActionAll.hh"
+#include "RunAction.hh"
 
 #include "G4Run.hh"
 #include "G4RunManager.hh"
@@ -17,27 +7,19 @@
 #include "G4CsvAnalysisManager.hh"
 #include "G4XmlAnalysisManager.hh"
 #include "G4RootAnalysisManager.hh"
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-wuRunActionAll::wuRunActionAll()
-{
+RunAction::RunAction()
+{}
 
+RunAction::~RunAction()
+{}
 
-}
-
-wuRunActionAll::~wuRunActionAll()
-{
-
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4Run* wuRunActionAll::GenerateRun()
+G4Run* RunAction::GenerateRun()
 {
   return 0;
 }
 
-void wuRunActionAll::BeginOfRunAction(const G4Run* /*aRun*/)
+void RunAction::BeginOfRunAction(const G4Run* /*aRun*/)
 {
   analysisManager = G4RootAnalysisManager::Instance();
   // analysisManager = G4CsvAnalysisManager::Instance();
@@ -86,19 +68,13 @@ void wuRunActionAll::BeginOfRunAction(const G4Run* /*aRun*/)
   analysisManager->CreateNtupleDColumn("yMomentumDirectionPost");
   analysisManager->CreateNtupleDColumn("zMomentumDirectionPost");
   analysisManager->CreateNtupleDColumn("Velocitypost");
-
   
   analysisManager->FinishNtuple();
   analysisManager->OpenFile("outputdata");//输出文件名
-  
 }
 
-void wuRunActionAll::EndOfRunAction(const G4Run* /*aRun*/)
+void RunAction::EndOfRunAction(const G4Run* /*aRun*/)
 {
   analysisManager->Write();
   analysisManager->CloseFile();
-
 }
-
-// 
-// wuRunActionAll.cc ends here

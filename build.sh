@@ -11,4 +11,3 @@ cmake ..
 make
 
 echo "build completed!"
-cd ./build

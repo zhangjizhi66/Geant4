@@ -1,16 +1,6 @@
-// wuRunActionAll.hh --- 
-// 
-// Description: 
-// Author: Hongyi Wu(吴鸿毅)
-// Email: wuhongyi@qq.com 
-// Created: 一 5月  8 20:36:01 2017 (+0800)
-// Last-Updated: 日 5月  6 21:18:20 2018 (+0800)
-//           By: Hongyi Wu(吴鸿毅)
-//     Update #: 2
-// URL: http://wuhongyi.cn 
 
-#ifndef _WURUNACTIONALL_H_
-#define _WURUNACTIONALL_H_
+#ifndef _RUNACTION_H_
+#define _RUNACTION_H_
 
 //  The user's concrete class derived from this class must be set to
 // G4RunManager via G4RunManager::SetUserAction() method.
@@ -20,15 +10,14 @@
 #include <cstring>
 #include "G4ios.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 class G4VAnalysisManager;
 class G4Run;
 
-class wuRunActionAll : public G4UserRunAction
+class RunAction : public G4UserRunAction
 {
 public:
-  wuRunActionAll();
-  virtual ~wuRunActionAll();
+  RunAction();
+  virtual ~RunAction();
 
 public:
   // The user can override the following method to instanciate his/her own
@@ -44,12 +33,8 @@ public:
   virtual void BeginOfRunAction(const G4Run* aRun);
   virtual void EndOfRunAction(const G4Run* aRun);
 
-
 private:
   G4VAnalysisManager* analysisManager;
-  
 };
 
-#endif /* _WURUNACTIONALL_H_ */
-// 
-// wuRunActionAll.hh ends here
+#endif /* _RUNACTION_H_ */

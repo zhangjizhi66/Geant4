@@ -1,43 +1,26 @@
-// wuPrimaryGeneratorActionAll.cc --- 
-// 
-// Description: 
-// Author: Hongyi Wu(吴鸿毅)
-// Email: wuhongyi@qq.com 
-// Created: 二 5月  9 10:31:02 2017 (+0800)
-// Last-Updated: 一 5月  7 23:26:25 2018 (+0800)
-//           By: Hongyi Wu(吴鸿毅)
-//     Update #: 11
-// URL: http://wuhongyi.cn 
 
-#include "wuPrimaryGeneratorActionAll.hh"
+#include "PrimaryGeneratorAction.hh"
 
 #include "G4SystemOfUnits.hh"
 #include "G4PhysicalConstants.hh"
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-wuPrimaryGeneratorActionAll::wuPrimaryGeneratorActionAll()
-  : G4VUserPrimaryGeneratorAction(),particleGun(NULL)
+PrimaryGeneratorAction::PrimaryGeneratorAction() : G4VUserPrimaryGeneratorAction(),particleGun(NULL)
 {
   particleGun = new G4ParticleGun(1);///*G4int n_particle*/
 }
 
-wuPrimaryGeneratorActionAll::~wuPrimaryGeneratorActionAll()
+PrimaryGeneratorAction::~PrimaryGeneratorAction()
 {
-  if(particleGun)
-    {
+  if(particleGun){
       delete particleGun;
       particleGun =NULL;
     }  
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void wuPrimaryGeneratorActionAll::GeneratePrimaries(G4Event* anEvent)
+void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* pp = 0;
-
-  // -------------------------
   
   //自定义带电粒子
   // G4int IonZ = 1;
@@ -50,25 +33,20 @@ void wuPrimaryGeneratorActionAll::GeneratePrimaries(G4Event* anEvent)
 
   //Geant4已经定义的粒子
   pp = particleTable->FindParticle("gamma");
-
-  // -------------------------
   
   if(pp)
     particleGun->SetParticleDefinition(pp);
   else
     G4cout<<"##Null pp in wuPrimaryGeneratorAction::SetParticleGun()"<<G4endl;
-
   
   //primary particle kinetic energy
   particleGun->SetParticleEnergy(2.0*MeV);
-
 
   // primary particle position
   G4double x = 0.;
   G4double y = 0.;
   G4double z = 0.;
   particleGun->SetParticlePosition(G4ThreeVector(x, y, z));
-
 
   // primary particle moving direction
   G4double  DirectRotX = 0.0*pi/180.*rad;
@@ -90,8 +68,6 @@ void wuPrimaryGeneratorActionAll::GeneratePrimaries(G4Event* anEvent)
 
   //这个调用一次设置一次粒子，一次模拟要同时发射多个不同粒子就得多次调用它
   particleGun->GeneratePrimaryVertex(anEvent);
-  
-  //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
   
   // G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();// return the pointer to G4ParticleTable object. G4ParticleTable is a "singleton" and can get its pointer by this function. At the first time of calling this function, the G4ParticleTable object is instantiated 
   // G4ParticleDefinition* pp = 0;
@@ -120,12 +96,4 @@ void wuPrimaryGeneratorActionAll::GeneratePrimaries(G4Event* anEvent)
   // particleGun->SetParticleTime(/*G4double aTime*/);
 
   // particleGun->GeneratePrimaryVertex(anEvent);//这个调用一次设置一次粒子，一次模拟要同时发射多个不同粒子就得多次调用它
-
-  
 }
-
-
-// 
-// wuPrimaryGeneratorActionAll.cc ends here
-
-

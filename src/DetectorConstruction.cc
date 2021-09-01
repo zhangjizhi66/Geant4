@@ -1,17 +1,5 @@
-// wuDetectorConstruction.cc --- 
-// 
-// Description: Geant4.10样式
-// Author: Hongyi Wu(吴鸿毅)
-// Email: wuhongyi@qq.com 
-// Created: 四 5月 22 16:44:39 2014 (+0800)
-// Last-Updated: 一 5月  7 22:16:54 2018 (+0800)
-//           By: Hongyi Wu(吴鸿毅)
-//     Update #: 188
-// URL: http://wuhongyi.cn 
 
-
-#include "wuDetectorConstruction.hh"
-
+#include "DetectorConstruction.hh"
 
 #include "G4RunManager.hh"
 #include "G4NistManager.hh"
@@ -50,25 +38,19 @@
 #include "G4Trd.hh"
 #include "G4Tubs.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //初始化
 
-wuDetectorConstruction::wuDetectorConstruction()
-  : G4VUserDetectorConstruction(),checkOverlaps(true),fVisAttributes(),logicWorld(0)
-{
+DetectorConstruction::DetectorConstruction() : G4VUserDetectorConstruction(),checkOverlaps(true),fVisAttributes(),logicWorld(0)
+{}
 
-}
-
-wuDetectorConstruction::~wuDetectorConstruction()
+DetectorConstruction::~DetectorConstruction()
 {
   //释放可视化界面的颜色设置变量
-  for (G4int i=0; i<G4int(fVisAttributes.size()); ++i) 
-    {
+  for (G4int i=0; i<G4int(fVisAttributes.size()); i++) 
       delete fVisAttributes[i];
-    } 
 }
 
-G4VPhysicalVolume* wuDetectorConstruction::Construct()
+G4VPhysicalVolume* DetectorConstruction::Construct()
 {
   // Define materials 
   DefineMaterials();
@@ -76,16 +58,13 @@ G4VPhysicalVolume* wuDetectorConstruction::Construct()
   return DefineVolumes();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void wuDetectorConstruction::ConstructSDandField()
+void DetectorConstruction::ConstructSDandField()
 {
   //快速添加SD
   // BuildSensitiveDetector(logicWorld);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void wuDetectorConstruction::DefineMaterials()
+void DetectorConstruction::DefineMaterials()
 { 
   //在这里先定义所有可能用到的材料
   // Get nist material manager
@@ -120,7 +99,6 @@ void wuDetectorConstruction::DefineMaterials()
   // nist->FindOrBuildMaterial("G4_URANIUM_OXIDE");//氧化铀 
   // nist->FindOrBuildMaterial("G4_URANIUM_MONOCARBIDE");//碳化铀
   // nist->FindOrBuildMaterial("G4_URANIUM_DICARBIDE");//二碳化铀
-
   
   // // elements
   // G4Element* H = nist->FindOrBuildElement("H",false);//1
@@ -140,7 +118,6 @@ void wuDetectorConstruction::DefineMaterials()
   // G4Element* I = nist->FindOrBuildElement("I",false);//53
   // G4Element* Cs = nist->FindOrBuildElement("Cs",false);//55
   // G4Element* Ce = nist->FindOrBuildElement("Ce",false);//58
-
 
   // G4Isotope* U4 = new G4Isotope("U234",92,234,234.02*g/mole);
   // G4Isotope* U5 = new G4Isotope("U235",92,235,235.01*g/mole);
@@ -177,7 +154,6 @@ void wuDetectorConstruction::DefineMaterials()
 
   // G4Material* matHEU4568 = new G4Material("HEU4568",18.75*g/cm3,1);
   // matHEU4568->AddElement(HEU4568, 1.0);
-
   
   // G4Material* matSteel = new G4Material("Steel",7.788*g/cm3,9);
   // matSteel->AddElement(Fe,62.1805*perCent);
@@ -190,24 +166,19 @@ void wuDetectorConstruction::DefineMaterials()
   // matSteel->AddElement(P,0.018*perCent);
   // matSteel->AddElement(S,0.0015*perCent);
   
-  
   // Print materials，运行时在终端输出材料信息
   G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
-G4VPhysicalVolume*wuDetectorConstruction::DefineVolumes()
+G4VPhysicalVolume*DetectorConstruction::DefineVolumes()
 {
-
   //通过G4Material::GetMaterial()获取DefineMaterials()中定义的材料！
   G4Material* world_mat =  G4Material::GetMaterial("G4_Galactic");
   G4Material* dssd_mat =  G4Material::GetMaterial("G4_Galactic");
   G4Material* clover_mat =  G4Material::GetMaterial("G4_Ge");
-
-  //     
+   
   // World
-  //
+
   G4double sizeXYZ = 1.0*m;
 
   G4double dssdX = 5.0*cm;
@@ -237,8 +208,6 @@ G4VPhysicalVolume*wuDetectorConstruction::DefineVolumes()
                       0,                     //copy number
                       checkOverlaps);        //overlaps checking
 
-
-
   G4Box* solidDSSD =    
     new G4Box("DSSD",                    //its name
   	      0.5*dssdX, 0.5*dssdY, 0.5*dssdZ); //its size
@@ -262,7 +231,6 @@ G4VPhysicalVolume*wuDetectorConstruction::DefineVolumes()
 		      false,                   //no boolean operation
 		      0,                       //copy number
 		      checkOverlaps);          //overlaps checking
-
   
   G4Tubs* solidClover =
     new G4Tubs("Clover",
@@ -289,11 +257,8 @@ G4VPhysicalVolume*wuDetectorConstruction::DefineVolumes()
 		      false,                   //no boolean operation
 		      0,                       //copy number
 		      checkOverlaps);          //overlaps checking
-      
-
 
   //===============================
-
 
     // visualization attributes ------------------------------------------------
     //可视化界面几何体颜色设置（可有可无）
@@ -326,14 +291,12 @@ G4VPhysicalVolume*wuDetectorConstruction::DefineVolumes()
     // G4Colour  brown   (0.7, 0.4, 0.1) ;
 
   //===================================================================
-  //
+
   //always return the physical World
-  //
   return physWorld;  
 }
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void wuDetectorConstruction::BuildSensitiveDetector(G4LogicalVolume* lv)
+void DetectorConstruction::BuildSensitiveDetector(G4LogicalVolume* lv)
 {
   // if(!lv){
   //   G4cout<<"$$No given logical volume, no SD built"<<G4endl;
@@ -344,9 +307,3 @@ void wuDetectorConstruction::BuildSensitiveDetector(G4LogicalVolume* lv)
   // SDman->AddNewDetector(sd1);
   // lv->SetSensitiveDetector(sd1);
 }
-
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-// 
-// wuDetectorConstruction.cc ends here

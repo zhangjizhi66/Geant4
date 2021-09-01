@@ -1,38 +1,23 @@
-// wuSteppingActionAll.cc --- 
-// 
-// Description: 
-// Author: Hongyi Wu(吴鸿毅)
-// Email: wuhongyi@qq.com 
-// Created: 二 5月  9 08:49:31 2017 (+0800)
-// Last-Updated: 一 5月  7 22:13:41 2018 (+0800)
-//           By: Hongyi Wu(吴鸿毅)
-//     Update #: 11
-// URL: http://wuhongyi.cn 
 
-#include "wuSteppingActionAll.hh"
+#include "SteppingAction.hh"
 #include "G4TrackVector.hh"
 #include "G4SteppingManager.hh"
 
 #include "G4CsvAnalysisManager.hh"
 #include "G4XmlAnalysisManager.hh"
 #include "G4RootAnalysisManager.hh"
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-wuSteppingActionAll::wuSteppingActionAll()
-  : G4UserSteppingAction()
+
+SteppingAction::SteppingAction() : G4UserSteppingAction()
 {
   analysisManager = G4RootAnalysisManager::Instance();
   // analysisManager = G4CsvAnalysisManager::Instance();
   // analysisManager = G4XmlAnalysisManager::Instance();
 }
 
-wuSteppingActionAll::~wuSteppingActionAll()
-{
+SteppingAction::~SteppingAction()
+{}
 
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void wuSteppingActionAll::UserSteppingAction(const G4Step* step)
+void SteppingAction::UserSteppingAction(const G4Step* step)
 {
   // Collect data step by step
 
@@ -62,7 +47,6 @@ void wuSteppingActionAll::UserSteppingAction(const G4Step* step)
   // step->GetControlFlag();//G4SteppingControl    cotrole flag for stepping
   // step->GetDeltaPosition();//G4ThreeVector
   // step->GetDeltaTime();//G4double
-
 
   // Information in G4StepPoint (PreStepPoint and PostStepPoint) includes:
   // (x, y, z, t)
@@ -106,7 +90,6 @@ void wuSteppingActionAll::UserSteppingAction(const G4Step* step)
   // steppoint->GetMagneticMoment();//G4double
   // steppoint->GetWeight();//G4double
 
-
   // G4SteppingManager 类中有很多函数
   // G4SteppingManager* steppingManager = fpSteppingManager;
   // G4TrackVector* fSecondary = steppingManager->GetfSecondary();
@@ -115,26 +98,20 @@ void wuSteppingActionAll::UserSteppingAction(const G4Step* step)
   //     std::cout<<lp1<<std::endl;
   //   }
 
-  //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-
   // energy deposit
   EDep = step->GetTotalEnergyDeposit();
 
-
   // step length
   StepLength = 0.;
-  if ( step->GetTrack()->GetDefinition()->GetPDGCharge() != 0. )
-    {
+  if ( step->GetTrack()->GetDefinition()->GetPDGCharge() != 0. ){
       StepLength = step->GetStepLength();
-    }
+  }
   
   G4Track* aTrack = step->GetTrack();//获取数据接口
   G4ParticleDefinition* theparticle = aTrack->GetDefinition();
   PName = theparticle->GetParticleName();
-  
 
-  const G4DynamicParticle* dyParticle = aTrack->GetDynamicParticle();//获取数据接口
+  //const G4DynamicParticle* dyParticle = aTrack->GetDynamicParticle();  //获取数据接口
 
   EventID = G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetEventID();
   TrackID = aTrack->GetTrackID();
@@ -142,7 +119,6 @@ void wuSteppingActionAll::UserSteppingAction(const G4Step* step)
   CurrentStepNumber = aTrack->GetCurrentStepNumber();
   TrackLength = aTrack->GetTrackLength();
   TrackStatus = aTrack->GetTrackStatus();
-
 
   G4StepPoint* preStepPoint = step->GetPreStepPoint();//获取数据接口
   G4StepPoint* postStepPoint = step->GetPostStepPoint();//获取数据接口
@@ -152,13 +128,11 @@ void wuSteppingActionAll::UserSteppingAction(const G4Step* step)
   if(postStepPoint->GetPhysicalVolume())//判断是否在world外
     postStepVolume = postStepPoint->GetPhysicalVolume()->GetLogicalVolume();
 
-
   // Dynamical data of the particle
   Mass = preStepPoint->GetMass();
   Charge = preStepPoint->GetCharge();
   MagneticMoment = preStepPoint->GetMagneticMoment();
   TrackWeight = preStepPoint->GetWeight(); 
-
 
   PosPre = preStepPoint->GetPosition();
   EkPre = preStepPoint->GetKineticEnergy();
@@ -170,11 +144,9 @@ void wuSteppingActionAll::UserSteppingAction(const G4Step* step)
   StepStatusPre = preStepPoint->GetStepStatus();
   ProperTimePre = preStepPoint->GetProperTime();
 
-
   const G4VProcess* pcr = aTrack->GetCreatorProcess();
   if(pcr) CreatorProcess = pcr->GetProcessName();
   else CreatorProcess = "##";
-  
 
   PosPost = postStepPoint->GetPosition();
   EkPost = postStepPoint->GetKineticEnergy();
@@ -187,9 +159,6 @@ void wuSteppingActionAll::UserSteppingAction(const G4Step* step)
 
   StepStatusPost = postStepPoint->GetStepStatus();
   ProperTimePost = postStepPoint->GetProperTime();
-
-  
-  //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
   
   analysisManager->FillNtupleIColumn(0, EventID);
   analysisManager->FillNtupleIColumn(1, ParentID);
@@ -232,10 +201,5 @@ void wuSteppingActionAll::UserSteppingAction(const G4Step* step)
   analysisManager->FillNtupleDColumn(38, MomentumDirectionPost.z());
   analysisManager->FillNtupleDColumn(39, VelocityPost);
 
-
   analysisManager->AddNtupleRow();  //相当于 Fill
 }
-
-
-// 
-// wuSteppingActionAll.cc ends here

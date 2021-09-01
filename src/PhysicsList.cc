@@ -1,15 +1,5 @@
-// wuPhysicsList.cc --- 
-// 
-// Description: 
-// Author: Hongyi Wu(吴鸿毅)
-// Email: wuhongyi@qq.com 
-// Created: 四 5月 22 16:56:53 2014 (+0800)
-// Last-Updated: 三 8月 18 16:51:33 2021 (+0800)
-//           By: Hongyi Wu(吴鸿毅)
-//     Update #: 99
-// URL: http://wuhongyi.cn 
 
-#include "wuPhysicsList.hh"
+#include "PhysicsList.hh"
 
 // particles
 #include "G4BosonConstructor.hh"
@@ -35,7 +25,6 @@
 
 #include "G4ProductionCuts.hh"
 #include "G4NeutronTrackingCut.hh"
-
 
 // Decay
 #include "G4DecayPhysics.hh"
@@ -121,8 +110,7 @@
 // Stopping
 #include "G4StoppingPhysics.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-wuPhysicsList::wuPhysicsList(G4int ver)
+PhysicsList::PhysicsList(G4int ver)
 {
   // G4DataQuestionaire it(photon, neutron);
   G4cout << "<<< Reference Physics List wuPhysicsList "<<G4endl;
@@ -131,20 +119,16 @@ wuPhysicsList::wuPhysicsList(G4int ver)
 
   // Transportation
   AddTransportation();
-
   
   // EM Physics
   this->RegisterPhysics(new G4EmStandardPhysics(ver));
   // this->RegisterPhysics( new G4EmLowEPPhysics(ver));
-
   
   // Synchroton Radiation & GN Physics
   this->RegisterPhysics(new G4EmExtraPhysics(ver));
-
   
   // Decays
   this->RegisterPhysics(new G4DecayPhysics(ver));
-
   
   // Radioactive decay
   this->RegisterPhysics(new G4RadioactiveDecayPhysics());
@@ -154,7 +138,6 @@ wuPhysicsList::wuPhysicsList(G4int ver)
   // radioactiveDecay->SetARM(false);               //Atomic Rearangement
   // G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();  
   // ph->RegisterProcess(radioactiveDecay, G4GenericIon::GenericIon());
-
 
   // // Need to initialize atomic deexcitation outside of radioactive decay
   G4LossTableManager* theManager = G4LossTableManager::Instance();
@@ -171,28 +154,17 @@ wuPhysicsList::wuPhysicsList(G4int ver)
   
   G4NuclideTable::GetInstance()->SetThresholdOfHalfLife(0.1 * picosecond);// mandatory for G4NuclideTable
   G4NuclideTable::GetInstance()->SetLevelTolerance(1.0 * eV);  
-
-
   
   // Optical
   this->RegisterPhysics(new G4OpticalPhysics(0));
-
-
-
-
-  //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
   
   G4EmParameters::Instance()->Dump();
-
-  
 }
 
-wuPhysicsList::~wuPhysicsList()
-{
+PhysicsList::~PhysicsList()
+{}
 
-}
-
-void wuPhysicsList::SetCuts()
+void PhysicsList::SetCuts()
 {
   //ParticleRangeCut in unit of mm. If a particle with E kinetic
   //less than that correponding to this range value will not be 
@@ -201,10 +173,6 @@ void wuPhysicsList::SetCuts()
   
   this->SetCutsWithDefault();   
   G4cout<<"*_^Rangecut(producing threshold)="<<defaultCutValue<<"mm !"<< G4endl; 
-
-
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
   //区域Production thresholds示例
   // Production thresholds for detector regions
@@ -229,7 +197,7 @@ void wuPhysicsList::SetCuts()
 }
 
 
-void wuPhysicsList::ConstructParticle()
+void PhysicsList::ConstructParticle()
 {
   // pseudo-particles
   G4Geantino::GeantinoDefinition();
@@ -252,7 +220,3 @@ void wuPhysicsList::ConstructParticle()
   G4ShortLivedConstructor pShortLivedConstructor;
   pShortLivedConstructor.ConstructParticle();  
 }
-
-
-// 
-// wuPhysicsList.cc ends here

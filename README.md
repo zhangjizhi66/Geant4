@@ -4,6 +4,8 @@
 
 ./build.sh
 
+cd build
+
 ./geant4 -l
 
 Idle> /run/beamOn 100000
