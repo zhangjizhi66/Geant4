@@ -53,11 +53,11 @@ target_link_libraries(${PROJ_NAME} ${Geant4_LIBRARIES})#
 # relies on these scripts being in the current working directory.
 #
 set(EXAMPLEB1_SCRIPTS
-   init.mac
-   init_vis.mac
-   vis.mac
-   geant4.in
-   geant4.out
+   scripts/init.mac
+   scripts/init_vis.mac
+   scripts/vis.mac
+   scripts/geant4.in
+   scripts/geant4.out
   )
 
 foreach(_script ${EXAMPLEB1_SCRIPTS})

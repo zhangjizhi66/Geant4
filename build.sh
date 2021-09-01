@@ -1,5 +1,7 @@
 #!/bin/bash
+
 if [ -d "build" ]; then
+  echo "deleting folder ./build"
   rm -r build
 fi
 
@@ -8,5 +10,5 @@ cd build
 cmake ..
 make
 
-cd build
 echo "build completed!"
+cd ./build
