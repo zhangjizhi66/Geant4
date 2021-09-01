@@ -1,11 +1,9 @@
-# geant4 样板
+# geant4 示例代码
 
 ## 运行
 
 ./build.sh
 
-cd build
-
-./geant4 -l
+build/geant4 -l
 
 Idle> /run/beamOn 100000

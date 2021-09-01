@@ -66,9 +66,7 @@ int main(int argc,char** argv)
   G4Random::setTheSeed(seconds);
 
   // Construct the default run manager
-  G4MTRunManager* mtrunManager = NULL;
-
-  mtrunManager = new G4MTRunManager;
+  G4MTRunManager* mtrunManager = new G4MTRunManager;
   mtrunManager->SetNumberOfThreads(2);
   // mtrunManager->SetUserInitialization(new wuWorkerInitialization);
 

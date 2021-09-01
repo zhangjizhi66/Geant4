@@ -22,7 +22,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* pp = 0;
   
-  //自定义带电粒子
+  // 自定义带电粒子
   // G4int IonZ = 1;
   // G4int IonA = 1;
   // G4double IonEstar = 0.0; //exitition energy
@@ -37,30 +37,37 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   if(pp)
     particleGun->SetParticleDefinition(pp);
   else
-    G4cout<<"##Null pp in wuPrimaryGeneratorAction::SetParticleGun()"<<G4endl;
+    G4cout<<"Null pp in PrimaryGeneratorAction::SetParticleGun()"<<G4endl;
   
   //primary particle kinetic energy
-  particleGun->SetParticleEnergy(2.0*MeV);
+  G4double deltaE = 0.*keV;
+  G4double centerE = 2.*MeV;
+  particleGun->SetParticleEnergy(centerE + deltaE*(G4UniformRand()-0.5));
 
   // primary particle position
-  G4double x = 0.;
-  G4double y = 0.;
-  G4double z = 0.;
+  G4double envSizeXY = 0.*cm;
+  G4double envSizeZ = 0.*mm;
+  G4double x = envSizeXY * (G4UniformRand()-0.5);
+  G4double y = envSizeXY * (G4UniformRand()-0.5);
+  G4double z = envSizeZ * (G4UniformRand()-0.5);
   particleGun->SetParticlePosition(G4ThreeVector(x, y, z));
 
   // primary particle moving direction
   G4double  DirectRotX = 0.0*pi/180.*rad;
   G4double  DirectRotY = 0.0*pi/180.*rad;
   G4double  DirectRotZ = 0.0*pi/180.*rad;
-  G4double theta;
-  G4double RangeThetaPri = 180*pi/180.*rad;  // theta range
-  G4double phi = G4UniformRand()*2.0*pi;    // phi range
-  G4double rg = 1.0-cos(RangeThetaPri);
+    
+  G4double  theta;
+  G4double  RangeThetaPri = 180*pi/180.*rad;  // theta range
+  G4double  phi = G4UniformRand()*2.0*pi;    // phi range
+  G4double  rg = 1.0-cos(RangeThetaPri);
   theta = acos(1.0-G4UniformRand()*rg);
-  G4double cosPX = sin(theta)*cos(phi);
-  G4double cosPY = sin(theta)*sin(phi);
-  G4double cosPZ = cos(theta);
+    
+  G4double  cosPX = sin(theta)*cos(phi);
+  G4double  cosPY = sin(theta)*sin(phi);
+  G4double  cosPZ = cos(theta);
   G4ThreeVector directPri(cosPX, cosPY, cosPZ);
+    
   directPri.rotateX(DirectRotX);
   directPri.rotateY(DirectRotY);
   directPri.rotateZ(DirectRotZ);

@@ -38,8 +38,6 @@
 #include "G4Trd.hh"
 #include "G4Tubs.hh"
 
-//初始化
-
 DetectorConstruction::DetectorConstruction() : G4VUserDetectorConstruction(),checkOverlaps(true),fVisAttributes(),logicWorld(0)
 {}
 
@@ -52,9 +50,7 @@ DetectorConstruction::~DetectorConstruction()
 
 G4VPhysicalVolume* DetectorConstruction::Construct()
 {
-  // Define materials 
   DefineMaterials();
-
   return DefineVolumes();
 }
 
@@ -190,32 +186,32 @@ G4VPhysicalVolume*DetectorConstruction::DefineVolumes()
   G4double cloverZ = 10.0*cm;
   
   G4Box* solidWorld =    
-    new G4Box("World",                       //its name
-  	      0.5*sizeXYZ, 0.5*sizeXYZ, 0.5*sizeXYZ);     //its size
+    new G4Box("World",                          //its name
+  	         0.5*sizeXYZ, 0.5*sizeXYZ, 0.5*sizeXYZ);     //its size
      
   logicWorld =                         
     new G4LogicalVolume(solidWorld,          //its solid
-                        world_mat,           //its material
-                        "World");            //its name
+                  world_mat,           //its material
+                  "World");            //its name
                                    
   physWorld = 
-    new G4PVPlacement(0,                     //no rotation set 0
-                      G4ThreeVector(),       //at (0,0,0)
-                      logicWorld,            //its logical volume
-                      "World",               //its name
-                      0,                     //its mother  volume
-                      false,                 //no boolean operation
-                      0,                     //copy number
-                      checkOverlaps);        //overlaps checking
+    new G4PVPlacement(0,                //no rotation set 0
+                G4ThreeVector(),       //at (0,0,0)
+                logicWorld,          //its logical volume
+                "World",            //its name
+                0,                //its mother  volume
+                false,             //no boolean operation
+                0,                 //copy number
+                checkOverlaps);        //overlaps checking
 
   G4Box* solidDSSD =    
     new G4Box("DSSD",                    //its name
-  	      0.5*dssdX, 0.5*dssdY, 0.5*dssdZ); //its size
+  	         0.5*dssdX, 0.5*dssdY, 0.5*dssdZ);  //its size
 
   logicDSSD =
     new G4LogicalVolume(solidDSSD,            //its solid
-			dssd_mat,             //its material
-			"DSSD");         //its name
+                  dssd_mat,             //its material
+                  "DSSD");             //its name
 
   G4RotationMatrix* rotdssd = new G4RotationMatrix();
   rotdssd->rotateX(45.0*deg);
@@ -224,41 +220,39 @@ G4VPhysicalVolume*DetectorConstruction::DefineVolumes()
   
   physDSSD =
     new G4PVPlacement(rotdssd,                       //no rotation set 0
-		      G4ThreeVector(0.0,3.0*cm,dssdDis), //at (0,0,0)
-		      logicDSSD,               //its logical volume
-		      "DSSD",              //its name
-		      logicWorld,              //its mother  volume
-		      false,                   //no boolean operation
-		      0,                       //copy number
-		      checkOverlaps);          //overlaps checking
+                G4ThreeVector(0.0,3.0*cm,dssdDis),      //at (0,0,0)
+                logicDSSD,                      //its logical volume
+                "DSSD",                        //its name
+                logicWorld,                     //its mother  volume
+                false,                        //no boolean operation
+                0,                           //copy number
+                checkOverlaps);                  //overlaps checking
   
   G4Tubs* solidClover =
     new G4Tubs("Clover",
-	       0,//内半径
-	       cloverR,//外半径
-	       0.5*cloverZ,//Z轴方向的半长度
-	       0*degree,//圆周起始位置弧度值
-	       360*degree);//该实体的圆心角弧度值
+            0,             //内半径
+            cloverR,         //外半径
+            0.5*cloverZ,      //Z轴方向的半长度
+            0*degree,        //圆周起始位置弧度值
+            360*degree);      //该实体的圆心角弧度值
 
   logicClover =
     new G4LogicalVolume(solidClover,            //its solid
-			clover_mat,             //its material
-			"Clover");         //its name
+                  clover_mat,             //its material
+                  "Clover");              //its name
 
   G4RotationMatrix* rotclover = new G4RotationMatrix();
   rotclover->rotateY(90.0*deg);
   
   physClover =
     new G4PVPlacement(rotclover,                       //no rotation set 0
-		      G4ThreeVector(15.0*cm,0.0,0.0), //at (0,0,0)
-		      logicClover,               //its logical volume
-		      "Clover",              //its name
-		      logicWorld,              //its mother  volume
-		      false,                   //no boolean operation
-		      0,                       //copy number
-		      checkOverlaps);          //overlaps checking
-
-  //===============================
+                G4ThreeVector(15.0*cm,0.0,0.0),         //at (0,0,0)
+                logicClover,                      //its logical volume
+                "Clover",                        //its name
+                logicWorld,                      //its mother  volume
+                false,                          //no boolean operation
+                0,                             //copy number
+                checkOverlaps);                    //overlaps checking
 
     // visualization attributes ------------------------------------------------
     //可视化界面几何体颜色设置（可有可无）
