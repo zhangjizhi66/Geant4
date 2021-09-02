@@ -174,20 +174,21 @@ G4VPhysicalVolume*DetectorConstruction::DefineVolumes()
   G4Material* clover_mat =  G4Material::GetMaterial("G4_Ge");
    
   // World
-
   G4double sizeXYZ = 1.0*m;
 
+  //dssd
   G4double dssdX = 5.0*cm;
   G4double dssdY = 5.0*cm;
   G4double dssdZ = 1000.0*um;
   G4double dssdDis = 10.0*cm;
     
+  //clover
   G4double cloverR = 5.0*cm;
   G4double cloverZ = 10.0*cm;
   
   G4Box* solidWorld =    
     new G4Box("World",                          //its name
-  	         0.5*sizeXYZ, 0.5*sizeXYZ, 0.5*sizeXYZ);     //its size
+           0.5*sizeXYZ, 0.5*sizeXYZ, 0.5*sizeXYZ);     //its size
      
   logicWorld =                         
     new G4LogicalVolume(solidWorld,          //its solid
