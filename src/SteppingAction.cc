@@ -10,8 +10,6 @@
 SteppingAction::SteppingAction() : G4UserSteppingAction()
 {
   analysisManager = G4RootAnalysisManager::Instance();
-  // analysisManager = G4CsvAnalysisManager::Instance();
-  // analysisManager = G4XmlAnalysisManager::Instance();
 }
 
 SteppingAction::~SteppingAction()

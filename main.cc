@@ -1,19 +1,9 @@
 
 #include "G4MTRunManager.hh"  //这是多线程的头文件
 
-// #ifdef G4MULTITHREADED
-// #include "G4MTRunManager.hh"
-// #include "G4RunManager.hh"
-// #else
-// #include "G4RunManager.hh"
-// #endif
+#include "DetectorConstruction.hh"  //必需：探测器构建
 
-//探测器构建
-//madatory class - Detector Construction
-#include "DetectorConstruction.hh"
-
-//调用物理过程
-//mandatory class - physics 
+//必需：调用物理过程
 #include "PhysicsList.hh"
 #include "FTF_BIC.hh"// G4EmStandardPhysics G4EmExtraPhysics G4DecayPhysics G4HadronElasticPhysic G4HadronPhysicsFTF_BIC G4StoppingPhysics G4IonPhysics G4NeutronTrackingCut
 #include "FTFP_BERT_ATL.hh"// G4EmStandardPhysics G4EmExtraPhysics G4DecayPhysics G4HadronElasticPhysic G4HadronPhysicsFTFP_BERT_ATL G4StoppingPhysics G4IonPhysics G4NeutronTrackingCut 
@@ -40,38 +30,30 @@
 #include "G4ParticleHPManager.hh"
 
 //其它过程的管理
-//not mandatory class - ActionInitialization
+//非必需：ActionInitialization
 #include "ActionInitialization.hh"
 
 // 关于图形界面与交互接口
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
 #include "G4UItcsh.hh"
-// #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
-// #endif
-// #ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-// #endif
 
-#include "Randomize.hh"//随机数这里产生
-#include <ctime>// initialize random seed
+#include "Randomize.hh"  //随机数产生
+#include <ctime>
 
 using namespace std;
 
 int main(int argc,char** argv)
 {
   G4Random::setTheEngine(new CLHEP::RanecuEngine);
-  G4int seconds = time(NULL);
-  G4Random::setTheSeed(seconds);
+  G4Random::setTheSeed(time(NULL));
 
   // Construct the default run manager
   G4MTRunManager* mtrunManager = new G4MTRunManager;
   mtrunManager->SetNumberOfThreads(2);
-  // mtrunManager->SetUserInitialization(new wuWorkerInitialization);
 
-  // Set mandatory initialization classes ，410版本的框架是这样的，ActionInitialization来管理。
-  //
   // Detector construction
   mtrunManager->SetUserInitialization(new DetectorConstruction());
 
@@ -80,58 +62,42 @@ int main(int argc,char** argv)
   // mtrunManager->SetUserInitialization(physicsList);
   mtrunManager->SetUserInitialization(new FTFP_BERT_HP());
   
-  // User action initialization
+  // action initialization
   mtrunManager->SetUserInitialization(new ActionInitialization());
 
   // Initialize G4 kernel
   mtrunManager->Initialize();
 
-  // Print   Data source of this Partile HP calculation
+  // Print Data source of this Partile HP calculation
   // G4ParticleHPManager::GetInstance()->DumpDataSource();
 
-// #ifdef G4VIS_USE
   G4VisManager* visManager = 0;
-// #endif
-  
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
   G4String commandopt = argv[1];
   if(commandopt == "vis.mac"){  // 开启图形界面模式
-// #ifdef G4VIS_USE
       visManager = new G4VisExecutive;
       visManager->Initialize();
-// #endif   
-// #ifdef G4UI_USE
+
       G4UIExecutive* ui = new G4UIExecutive(argc, argv);
       UImanager->ApplyCommand("/control/execute vis.mac");
       ui->SessionStart();
       delete ui;
-// #endif
   }
   else{
-      if(commandopt == "-l"){  // 开启命令行模式
-// #ifdef G4UI_USE_TCSH    
+      if(commandopt == "-l"){  // 开启命令行模式   
         G4UIsession* session = new G4UIterminal(new G4UItcsh);
         session->SessionStart();
         delete session;
-// #endif
       }
-      else{  // 无图形界面执行脚本模式
+      else{              // 无图形界面执行脚本模式
         G4String command = "/control/execute ";
-        G4String fileName = argv[1];
-        UImanager->ApplyCommand(command + fileName);
+        UImanager->ApplyCommand(command + commandopt);
       }
   }
-
-  // Job termination
-  // Free the store: user actions, physics_list and detector_description are
-  // owned and deleted by the run manager, so they should not be deleted 
-  // in the main() program !
-
-// #ifdef G4VIS_USE
+    
   if(visManager != 0)
     delete visManager;
-// #endif
 
   delete mtrunManager;
   return 0;

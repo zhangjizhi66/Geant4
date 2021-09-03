@@ -21,9 +21,7 @@ G4Run* RunAction::GenerateRun()
 
 void RunAction::BeginOfRunAction(const G4Run* /*aRun*/)
 {
-  analysisManager = G4RootAnalysisManager::Instance();
-  // analysisManager = G4CsvAnalysisManager::Instance();
-  // analysisManager = G4XmlAnalysisManager::Instance();
+  analysisManager = G4RootAnalysisManager::Instance();  // choose file type: ROOT
 
   analysisManager->SetVerboseLevel(1);
   analysisManager->CreateNtuple("tree", "Geant4 data");

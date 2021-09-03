@@ -113,7 +113,7 @@
 PhysicsList::PhysicsList(G4int ver)
 {
   // G4DataQuestionaire it(photon, neutron);
-  G4cout << "<<< Reference Physics List wuPhysicsList "<<G4endl;
+  G4cout << "<<< Reference Physics List PhysicsList "<<G4endl;
 
   this->SetVerboseLevel(ver);
 

@@ -166,7 +166,7 @@ void DetectorConstruction::DefineMaterials()
   G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }
  
-G4VPhysicalVolume*DetectorConstruction::DefineVolumes()
+G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
 {
   //通过G4Material::GetMaterial()获取DefineMaterials()中定义的材料！
   G4Material* world_mat =  G4Material::GetMaterial("G4_Galactic");
