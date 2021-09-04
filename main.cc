@@ -100,18 +100,18 @@ int main(int argc,char** argv)
             UImanager->ApplyCommand("exit");
         }
         
-        // 图形界面模式
+        // 图形界面模式，参数为图形界面脚本文件路径
         else if (commandopt == "vis.mac"){
             visManager = new G4VisExecutive;
             visManager->Initialize();
 
             G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-            UImanager->ApplyCommand("/control/execute vis.mac");
+            UImanager->ApplyCommand("/control/execute scripts/vis.mac");
             ui->SessionStart();
             delete ui;
         }
         
-        // 脚本模式
+        // 脚本模式，参数应为脚本文件路径
         else {
             G4String command = "/control/execute ";
             UImanager->ApplyCommand(command + commandopt);

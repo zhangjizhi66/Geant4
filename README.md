@@ -6,17 +6,19 @@
 
 cd build
 
-./geant4 -l  （）
+./geant4 (par1) (par2)
 
-Idle> /run/beamOn (eventnum)   
+### 参数说明
 
-Idle> exit
+1、无参数输入，则本程序开启命令行模式。注意每次运行程序只能运行一次 /run/beamOn 命令，否则生成的 ROOT 文件会被覆盖，并出现无法预料的错误。
 
-### 注意事项
+2、第一参数为整数，则本程序运行一次 /run/beamOn (par1) 命令（参数作为 event 数目），并自动合并多线程产生的多个文件
 
-1、程序有且仅可有一个参数：使用 -l 参数开启命令行模式；使用 vis.mac 参数开启图形界面；将
+3、第一参数为 vis.mac，则本程序开启图形界面模式，并运行脚本 ./build/scripts/vis.mac
 
-2、每次运行程序只能运行一次 /run/beamOn 命令，否则生成的 ROOT 文件会被覆盖，并出现无法预料的错误
+4、第一参数为其他脚本路径，则本程序自动运行该脚本
+
+5、第二参数为整数，指定多线程的数目；若无有效的第二参数，则线程数默认为 2
 
 ## build.sh
 
@@ -28,7 +30,7 @@ Idle> exit
 
 CMakeLists.txt 为 cmake 方法的必需文件，指明了本程序的编译方法和文件清单
 
-建议在第 6 行更改编译后的程序名称：set(PROJ_NAME YourProjectName)
+可在第 6 行更改编译后的程序名称：set(PROJ_NAME YourProjectName)
 
 ## Class 列表
 

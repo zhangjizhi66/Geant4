@@ -31,14 +31,14 @@ add_executable(${PROJ_NAME} main.cc ${sources} ${headers})
 target_link_libraries(${PROJ_NAME} ${Geant4_LIBRARIES})
 
 # 将程序运行所需脚本拷贝至 ./build 目录
-set(EXAMPLEB1_SCRIPTS
+set(SCRIPTS
    scripts/init.mac
    scripts/init_vis.mac
    scripts/vis.mac
    scripts/geant4.in
    scripts/geant4.out
   )
-foreach(_script ${EXAMPLEB1_SCRIPTS})
+foreach(_script ${SCRIPTS})
   configure_file(
     ${PROJECT_SOURCE_DIR}/${_script}
     ${PROJECT_BINARY_DIR}/${_script}
