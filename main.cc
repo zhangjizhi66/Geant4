@@ -42,22 +42,26 @@
 #include "G4UIExecutive.hh"
 
 #include "Randomize.hh"
+
+#include <unistd.h>
 #include <ctime>
 
 using namespace std;
 
 int main(int argc,char** argv)
 {
-    if (argc > 2){
-        printf("EREOR: More than one parameter");
+    if (argc > 3){
+        printf("EREOR: More than 2 parameters");
         exit(EXIT_FAILURE);
     }
     
     G4Random::setTheEngine(new CLHEP::RanecuEngine);
     G4Random::setTheSeed(time(NULL));
 
-    // 创建多线程管理
-    G4int nThreads = 2;  // 线程数
+    // 创建多线程管理，读取第 2 个参数作为线程数，默认线程数 2
+    G4int nThreads;// 线程数
+    if (argc == 3) nThreads = atoi(argv[2]);
+    if (nThreads == 0) nThreads = 2;
     G4MTRunManager* mtrunManager = new G4MTRunManager;
     mtrunManager->SetNumberOfThreads(nThreads);
 
