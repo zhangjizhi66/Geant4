@@ -4,9 +4,31 @@
 
 ./build.sh
 
-build/geant4 -l
+cd build
 
-Idle> /run/beamOn 100000
+./geant4 -l  （）
+
+Idle> /run/beamOn (eventnum)   
+
+Idle> exit
+
+### 注意事项
+
+1、程序有且仅可有一个参数：使用 -l 参数开启命令行模式；使用 vis.mac 参数开启图形界面；将
+
+2、每次运行程序只能运行一次 /run/beamOn 命令，否则生成的 ROOT 文件会被覆盖，并出现无法预料的错误
+
+## build.sh
+
+1、删除已存在的 ./build 文件夹，创建新的 ./build 文件夹。此文件夹中存放所有编译产生的、程序运行需要的文件。
+
+2、用 cmake + make 方法编译。
+
+## CMakeLists.txt
+
+CMakeLists.txt 为 cmake 方法的必需文件，指明了本程序的编译方法和文件清单
+
+建议在第 6 行更改编译后的程序名称：set(PROJ_NAME YourProjectName)
 
 ## Class 列表
 

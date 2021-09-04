@@ -10,4 +10,4 @@ cd build
 cmake ..
 make
 
-echo "build completed!"
+echo "Done!"

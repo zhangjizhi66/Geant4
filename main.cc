@@ -1,9 +1,11 @@
 
-#include "G4MTRunManager.hh"  //这是多线程的头文件
+// 多线程
+#include "G4MTRunManager.hh"
 
-#include "DetectorConstruction.hh"  //必需：探测器构建
+// 探测器构建
+#include "DetectorConstruction.hh"
 
-//必需：调用物理过程
+// 物理过程
 #include "PhysicsList.hh"
 #include "FTF_BIC.hh"// G4EmStandardPhysics G4EmExtraPhysics G4DecayPhysics G4HadronElasticPhysic G4HadronPhysicsFTF_BIC G4StoppingPhysics G4IonPhysics G4NeutronTrackingCut
 #include "FTFP_BERT_ATL.hh"// G4EmStandardPhysics G4EmExtraPhysics G4DecayPhysics G4HadronElasticPhysic G4HadronPhysicsFTFP_BERT_ATL G4StoppingPhysics G4IonPhysics G4NeutronTrackingCut 
@@ -29,76 +31,106 @@
 
 #include "G4ParticleHPManager.hh"
 
-//其它过程的管理
-//非必需：ActionInitialization
+// Action管理
 #include "ActionInitialization.hh"
 
-// 关于图形界面与交互接口
+// 图形界面与交互接口
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
 #include "G4UItcsh.hh"
 #include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
 
-#include "Randomize.hh"  //随机数产生
+#include "Randomize.hh"
 #include <ctime>
 
 using namespace std;
 
 int main(int argc,char** argv)
 {
-  G4Random::setTheEngine(new CLHEP::RanecuEngine);
-  G4Random::setTheSeed(time(NULL));
+    if (argc > 2){
+        printf("EREOR: More than one parameter");
+        exit(EXIT_FAILURE);
+    }
+    
+    G4Random::setTheEngine(new CLHEP::RanecuEngine);
+    G4Random::setTheSeed(time(NULL));
 
-  // Construct the default run manager
-  G4MTRunManager* mtrunManager = new G4MTRunManager;
-  mtrunManager->SetNumberOfThreads(2);
+    // 创建多线程管理
+    G4int nThreads = 2;  // 线程数
+    G4MTRunManager* mtrunManager = new G4MTRunManager;
+    mtrunManager->SetNumberOfThreads(nThreads);
 
-  // Detector construction
-  mtrunManager->SetUserInitialization(new DetectorConstruction());
+    // 构建探测器
+    mtrunManager->SetUserInitialization(new DetectorConstruction());
 
-  // Physics list
-  // G4VModularPhysicsList* physicsList = new PhysicsList();
-  // mtrunManager->SetUserInitialization(physicsList);
-  mtrunManager->SetUserInitialization(new FTFP_BERT_HP());
+    // 物理过程：可选自定义的、或已封装好的物理过程类
+    // G4VModularPhysicsList* physicsList = new PhysicsList();
+    // mtrunManager->SetUserInitialization(physicsList);
+    mtrunManager->SetUserInitialization(new FTFP_BERT_HP());
   
-  // action initialization
-  mtrunManager->SetUserInitialization(new ActionInitialization());
+    // 初始化 action
+    mtrunManager->SetUserInitialization(new ActionInitialization());
 
-  // Initialize G4 kernel
-  mtrunManager->Initialize();
+    // 初始化 G4 内核
+    mtrunManager->Initialize();
 
-  // Print Data source of this Partile HP calculation
-  // G4ParticleHPManager::GetInstance()->DumpDataSource();
+    G4VisManager* visManager = 0;
+    G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-  G4VisManager* visManager = 0;
-  G4UImanager* UImanager = G4UImanager::GetUIpointer();
-
-  G4String commandopt = argv[1];
-  if(commandopt == "vis.mac"){  // 开启图形界面模式
-      visManager = new G4VisExecutive;
-      visManager->Initialize();
-
-      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-      UImanager->ApplyCommand("/control/execute vis.mac");
-      ui->SessionStart();
-      delete ui;
-  }
-  else{
-      if(commandopt == "-l"){  // 开启命令行模式   
+    // 命令行模式
+    if (argc == 1){
         G4UIsession* session = new G4UIterminal(new G4UItcsh);
         session->SessionStart();
         delete session;
-      }
-      else{              // 无图形界面执行脚本模式
-        G4String command = "/control/execute ";
-        UImanager->ApplyCommand(command + commandopt);
-      }
-  }
-    
-  if(visManager != 0)
-    delete visManager;
+    }
+    else{
+        G4String commandopt = argv[1];
+        G4int eventnum = atoi(argv[1]);
+        
+        // 自动运行 run
+        if (eventnum > 0){
+            char command [100];
+            sprintf(command,"/run/beamOn %d",eventnum);
+            UImanager->ApplyCommand(command);
+            UImanager->ApplyCommand("exit");
+        }
+        
+        // 图形界面模式
+        else if (commandopt == "vis.mac"){
+            visManager = new G4VisExecutive;
+            visManager->Initialize();
 
-  delete mtrunManager;
-  return 0;
+            G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+            UImanager->ApplyCommand("/control/execute vis.mac");
+            ui->SessionStart();
+            delete ui;
+        }
+        
+        // 脚本模式
+        else {
+            G4String command = "/control/execute ";
+            UImanager->ApplyCommand(command + commandopt);
+        }
+    }
+    
+    if(visManager != 0)
+        delete visManager;
+    delete mtrunManager;
+    
+    // 合并多线程产生的多个 ROOT 文件
+    if (access("geant4_t0.root",F_OK) == 0){
+        char commandhadd[1000],commandrm[1000];
+        strcpy(commandhadd,"hadd geant4.root");
+        strcpy(commandrm,"rm");
+        for (int i=0; i<nThreads; i++){
+            char buf[20];
+            sprintf(buf, " geant4_t%d.root", i);
+            strcat(commandhadd,buf);
+            strcat(commandrm,buf);
+        }
+        system(commandhadd);
+        system(commandrm);
+    }
+    return 0;
 }
