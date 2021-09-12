@@ -51,7 +51,7 @@ using namespace std;
 int main(int argc,char** argv)
 {
     if (argc > 3){
-        printf("EREOR: More than 2 parameters");
+        printf("ERROR: More than 2 parameters");
         exit(EXIT_FAILURE);
     }
     
@@ -59,7 +59,7 @@ int main(int argc,char** argv)
     G4Random::setTheSeed(time(NULL));
 
     // 创建多线程管理，读取第 2 个参数作为线程数，默认线程数 2
-    G4int nThreads;// 线程数
+    G4int nThreads = 0;// 线程数
     if (argc == 3) nThreads = atoi(argv[2]);
     if (nThreads == 0) nThreads = 2;
     G4MTRunManager* mtrunManager = new G4MTRunManager;
@@ -75,7 +75,7 @@ int main(int argc,char** argv)
   
     // 初始化 action
     mtrunManager->SetUserInitialization(new ActionInitialization());
-
+    
     // 初始化 G4 内核
     mtrunManager->Initialize();
 
@@ -101,7 +101,7 @@ int main(int argc,char** argv)
         }
         
         // 图形界面模式，参数为图形界面脚本文件路径
-        else if (commandopt == "vis.mac"){
+        else if (commandopt == "-v"){
             visManager = new G4VisExecutive;
             visManager->Initialize();
 
