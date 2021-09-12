@@ -43,8 +43,8 @@
 
 #include "Randomize.hh"
 
-#include <unistd.h>
-#include <ctime>
+#include <unistd.h>  // access 函数
+#include <ctime>    // time 函数
 
 using namespace std;
 
@@ -68,7 +68,7 @@ int main(int argc,char** argv)
     // 构建探测器
     mtrunManager->SetUserInitialization(new DetectorConstruction());
 
-    // 物理过程：可选自定义的、或已封装好的物理过程类
+    // 物理过程：可选自定义的(PhysicsList)、或已封装好的(FTFP_BERT_HP)物理过程类
     // G4VModularPhysicsList* physicsList = new PhysicsList();
     // mtrunManager->SetUserInitialization(physicsList);
     mtrunManager->SetUserInitialization(new FTFP_BERT_HP());
